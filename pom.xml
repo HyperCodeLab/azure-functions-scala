@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>wiki.dataengineering</groupId>
+  <artifactId>AzureFunctionsScala</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <inceptionYear>2023</inceptionYear>
+
+  <properties>
+    <scala.version>2.12.12</scala.version>
+    <java.version>1.8</java.version>
+
+    <azure.functions.maven.plugin.version>1.22.0</azure.functions.maven.plugin.version>
+    <azure.functions.java.library.version>2.2.0</azure.functions.java.library.version>
+
+    <azure.functionAppName>function-name</azure.functionAppName>
+    <azure.resourceGroup>azure-resource-group-name</azure.resourceGroup>
+    <azure.appServicePlanName>azure-app-service-plan</azure.appServicePlanName>
+    <azure.region>azure-region</azure.region>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>scala-tools.org</id>
+      <name>Scala-Tools Maven2 Repository</name>
+      <url>http://scala-tools.org/repo-releases</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>scala-tools.org</id>
+      <name>Scala-Tools Maven2 Repository</name>
+      <url>http://scala-tools.org/repo-releases</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.microsoft.azure.functions</groupId>
+      <artifactId>azure-functions-java-library</artifactId>
+      <version>${azure.functions.java.library.version}</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <sourceDirectory>src/main/scala</sourceDirectory>
+    <testSourceDirectory>src/test/scala</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <scalaVersion>${scala.version}</scalaVersion>
+          <args>
+            <arg>-target:jvm-1.5</arg>
+          </args>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-functions-maven-plugin</artifactId>
+        <version>${azure.functions.maven.plugin.version}</version>
+        <configuration>
+
+          <!-- function app name -->
+          <appName>${azure.functionAppName}</appName>
+
+          <!-- function app resource group -->
+          <resourceGroup>${azure.resourceGroup}</resourceGroup>
+
+          <!-- function app service plan name -->
+          <appServicePlanName>${azure.appServicePlanName}</appServicePlanName>
+
+          <!-- function app region-->
+          <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details#supported-regions for all valid values -->
+          <region>${azure.region}</region>
+
+          <runtime>
+            <!-- runtime os, could be windows, linux or docker-->
+            <os>linux</os>
+            <javaVersion>8</javaVersion>
+          </runtime>
+          <appSettings>
+            <property>
+              <name>FUNCTIONS_EXTENSION_VERSION</name>
+              <value>~4</value>
+            </property>
+          </appSettings>
+        </configuration>
+        <executions>
+          <execution>
+            <id>package-functions</id>
+            <goals>
+              <goal>package</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <version>4.8.0</version>
+        <configuration>
+          <scalaVersion>${scala.version}</scalaVersion>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
